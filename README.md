@@ -8,6 +8,12 @@ git
 php7.0
 php7.0-curl
 
+API keys:
+https://yobit.io/ru/api/keys/
+
+privilege:
+info & trade & deposits
+
 Example:
 
 Debian\Ubuntu
