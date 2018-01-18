@@ -1,6 +1,6 @@
 #!/usr/bin/php
 <?php
-$openSell = 0;
+$openBay = 0;
 
 // Переменные ставим свои -->
 // we put our variables -->
@@ -32,6 +32,14 @@ $nonce      = $buffer_nonce;
 // <-- get api_key, api_secret, nonce
 // <-- Получаем api_key, api_secret, nonce
 
+// Создаём файл errors под ошибки -->
+$fp = fopen("errors", "w+"); // Создаём файл errors
+$create_errors_file = fwrite($fp, "\n"); // Запись в файл errors
+if ($create_errors_file) echo "\nФайл errors успешно создан.\n";
+else echo "\nОшибка создания файла errors!\n";
+fclose($fp); //Закрытие файла errors
+// <-- Создаём файл errors под ошибки
+
 echo "\nOrder na ".$summBay." ".$moneta." sozdaetsa!\n";
 
 $reqOrder['method'] = "Trade";
@@ -59,8 +67,14 @@ $resOrder = curl_exec($ch);
 
 if($resOrder === false)
 {
-	$e = curl_error($ch);
-	debuglog($e);
+	echo "\nERROR! curl_exec method Trade!\n";
+	$text_error = "\nERROR! curl_exec method Trade!\n";
+	//пишем Error в файл errors
+	$fp = fopen("errors", "a"); // Открываем файл errors в режиме дозаписи
+	$write_error = fwrite($fp, $text_error); // Запись в файл errors
+	if ($write_error) echo "\nДанные в файл errors успешно занесены.\n";
+	else echo "\nОшибка при записи в файл errors!\n";
+	fclose($fp); //Закрытие файла errors
 	curl_close($ch);
 	goto m1;
 }
@@ -70,42 +84,56 @@ $result_decode = json_decode($resOrder, true);
 
 if($result_decode['success'] == 0)
 {
-	echo "\nERROR! ".$result_decode['error']."\n";
+	echo "\nERROR! Method Trade! ".$result_decode['error']."\n";
+	$text_error = "\nERROR! Method Trade! ".$result_decode['error']."\n";
+	//пишем Error в файл errors
+	$fp = fopen("errors", "a"); // Открываем файл errors в режиме дозаписи
+	$write_error = fwrite($fp, $text_error); // Запись в файл errors
+	if ($write_error) echo "\nДанные в файл errors успешно занесены.\n";
+	else echo "\nОшибка при записи в файл errors!\n";
+	fclose($fp); //Закрытие файла errors
 }
 else if($result_decode['success'] == 1)
 {
-	$openSell = 1;
+	$openBay = 1;
 }
 else
 {
-	echo "\nUnknown ERROR!\n";
+	echo "Unknown error method Trade!";
+	$text_error = "\nERROR! Unknown error method Trade!\n";
+	//пишем Error в файл errors
+	$fp = fopen("errors", "a"); // Открываем файл errors в режиме дозаписи
+	$write_error = fwrite($fp, $text_error); // Запись в файл errors
+	if ($write_error) echo "\nДанные в файл errors успешно занесены.\n";
+	else echo "\nОшибка при записи в файл errors!\n";
+	fclose($fp); //Закрытие файла errors
 }
 
 m1:
 	
-if($openSell == 1)
+if($openBay == 1)
 {
 	echo "\nOrder sucess!\n";
-	echo "\nNonce: ".$nonce."\n";
 	$nonce++;
-	//пишем Nonce в файл
-	$fp = fopen("nonce", "w+"); // Открываем файл в режиме записи
-	$write_nonce = fwrite($fp, $nonce); // Запись в файл
-	if ($write_nonce) echo "\nДанные в файл успешно занесены.\n";
-	else echo "\nОшибка при записи в файл!\n";
-	fclose($fp); //Закрытие файла
+	echo "\nNonce: ".$nonce."\n";
+	//пишем Nonce в файл nonce
+	$fp = fopen("nonce", "w+"); // Открываем файл nonce в режиме записи
+	$write_nonce = fwrite($fp, $nonce); // Запись в файл nonce
+	if ($write_nonce) echo "\nДанные в файл nonce успешно занесены.\n";
+	else echo "\nОшибка при записи в файл nonce!\n";
+	fclose($fp); //Закрытие файла nonce
 }
 else
 {
 	//echo "\nErrors!";
-	echo "\nNonce: ".$nonce."\n";
 	$nonce++;
-	//пишем Nonce в файл
-	$fp = fopen("nonce", "w+"); // Открываем файл в режиме записи
-	$write_nonce = fwrite($fp, $nonce); // Запись в файл
-	if ($write_nonce) echo "\nДанные в файл успешно занесены.\n";
-	else echo "\nОшибка при записи в файл!\n";
-	fclose($fp); //Закрытие файла
+	echo "\nNonce: ".$nonce."\n";
+	//пишем Nonce в файл nonce
+	$fp = fopen("nonce", "w+"); // Открываем файл nonce в режиме записи
+	$write_nonce = fwrite($fp, $nonce); // Запись в файл nonce
+	if ($write_nonce) echo "\nДанные в файл nonce успешно занесены.\n";
+	else echo "\nОшибка при записи в файл nonce!\n";
+	fclose($fp); //Закрытие файла nonce
 	echo "\nERROR! NO CREATE ORDER!\n";
 }
 

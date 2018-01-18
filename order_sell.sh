@@ -38,13 +38,13 @@ $nonce      = $buffer_nonce;
 // <-- get api_key, api_secret, nonce
 // <-- Получаем api_key, api_secret, nonce
 
-// Создаём файл под ошибки -->
-$fp = fopen("errors", "w+"); // Создаём файл
-$create_errors_file = fwrite($fp, "\n"); // Запись в файл
-if ($create_errors_file) echo "\nФайл успешно создан.\n";
-else echo "\nОшибка создания файла!\n";
-fclose($fp); //Закрытие файла
-// <-- Создаём файл под ошибки
+// Создаём файл errors под ошибки -->
+$fp = fopen("errors", "w+"); // Создаём файл errors
+$create_errors_file = fwrite($fp, "\n"); // Запись в файл errors
+if ($create_errors_file) echo "\nФайл errors успешно создан.\n";
+else echo "\nОшибка создания файла errors!\n";
+fclose($fp); //Закрытие файла errors
+// <-- Создаём файл errors под ошибки
 
 	for($nonce;$nonce<2147483646;$nonce++)
 	{
@@ -241,5 +241,9 @@ m2:
 		fclose($fp); //Закрытие файла nonce
 	}
 
-	echo "\nEnd script\n";
+$api_key    = NULL;
+$api_secret = NULL;
+$buffer_api_key = NULL;
+$buffer_api_secret = NULL;
+echo "\nEnd script\n";
 ?>
